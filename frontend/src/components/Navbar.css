@@ -1,0 +1,151 @@
+.navbar {
+  background-color: #2c3e50; /* Dark blue-gray */
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between; /* Changed to space between to push content to ends */
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure full width */
+  max-width: 100%; /* Prevent overflow */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.navbar-brand {
+  flex-shrink: 0;
+}
+
+.navbar-logo {
+  color: #ecf0f1; /* Light gray */
+  text-decoration: none;
+  font-size: 1.8rem;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar-logo:hover {
+  color: #3498db; /* Bright blue for hover */
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 1.5rem; /* Spacing between links */
+  margin-right: 2rem; /* Add margin to space links from user section */
+}
+
+.navbar-link {
+  color: #bdc3c7; /* Medium gray */
+  text-decoration: none;
+  font-size: 1.1rem;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease, border-bottom-color 0.3s ease;
+  position: relative;
+  border-bottom: 2px solid transparent; /* For underline effect on hover */
+}
+
+.navbar-link:hover,
+.navbar-link.active { /* You might add active class logic via NavLink if needed */
+  color: #ecf0f1; /* Light gray for hover/active */
+  border-bottom-color: #3498db; /* Bright blue underline */
+}
+
+/* User section and logout button */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-username {
+  color: #ecf0f1;
+  font-size: 0.95rem;
+}
+
+.navbar-logout {
+  background-color: #e74c3c; /* Red color for logout */
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-logout:hover {
+  background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Auth links for when user is not logged in */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-auth-link {
+  color: #bdc3c7;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  padding: 0.4rem 0.8rem;
+}
+
+.login-link:hover {
+  color: #ecf0f1;
+}
+
+.signup-link {
+  background-color: #3498db; /* Blue button for signup */
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.signup-link:hover {
+  background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* Responsive considerations (optional, can be expanded) */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .navbar-content {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .navbar-links {
+    margin-right: 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navbar-user {
+    flex-direction: column;
+    margin-top: 1rem;
+    width: 100%;
+    align-items: center;
+  }
+
+  .navbar-auth {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+  }
+} 

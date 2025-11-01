@@ -1,0 +1,1950 @@
+/* App.css */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  /* color-scheme: dark; Removed for mixed themes */
+  /* color: rgba(255, 255, 255, 0.87); Default text color will be set in body */
+  /* background-color: #1a1a1a; Default background will be set in body */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background-color: #f4f7f9; /* Light gray background for light theme */
+  color: #333; /* Dark text for light theme */
+  overflow-x: hidden; /* Prevent horizontal scrollbar globally */
+  /* overflow-y: auto; Will be handled by specific containers like .pre-meeting-layout or .app-container */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styles for the wrapper of pre-meeting pages (Join/Create) */
+.pre-meeting-layout {
+  background-color: #f4f7f9; /* Light theme background */
+  color: #333; /* Light theme text color */
+  min-height: 100%; /* Ensure it fills the viewport if content is short */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Added to center content horizontally */
+  justify-content: center;
+  overflow-y: auto; /* Allow scrolling for content on these pages */
+  width: 100%; /* Ensure it takes full width */
+  max-width: 100%;
+}
+
+/* Styles for the app-container for meeting room */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  width: 100%;
+  background-color: #212121; /* Dark theme background for meeting room */
+  color: #e0e0e0; /* Dark theme text color for meeting room */
+  text-align: left;
+  overflow: hidden; /* Meeting room itself is not scrollable, internal areas are */
+  max-width: 100%;
+}
+
+/* Meeting view layout */
+.meeting-view {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative; /* Needed for absolute positioning of panels/self-view */
+  width: 100%; /* Ensure it takes the full width */
+  max-width: 100%;
+}
+
+/* Video area styling - main container for all videos */
+.video-area {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 15px; /* Increased padding */
+  gap: 15px;     /* Increased gap */
+  overflow-y: auto;
+  background-color: #181818;
+  transition: width 0.3s ease-in-out; /* Transition width for panel */
+  height: calc(100vh - 70px);
+  box-sizing: border-box;
+  justify-content: center; /* Center content by default */
+  align-items: center;
+  align-content: center;
+  width: 100%; /* Start at full width */
+  max-width: 100%;
+}
+
+/* Adjust width when panel is open */
+.meeting-view.panel-is-open .video-area {
+  width: calc(100% - 300px); /* Panel width */
+  margin-right: 300px; /* Add margin to ensure content stays centered */
+}
+
+/* Wrapper for each video + its label below */
+.video-item-wrapper {
+  display: flex;
+  flex-direction: column; /* Stack video and label */
+  align-items: center; /* Center items horizontally */
+  position: relative;
+  transition: width 0.3s ease, height 0.3s ease, flex-basis 0.3s ease;
+  /* Sizing applied by participant count classes below */
+}
+
+.video-container {
+  width: 100%; /* Video container takes width of wrapper */
+  background-color: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #303030;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+}
+
+.video-element {
+  width: 100%; 
+  height: 100%; 
+  display: block;
+  background-color: #101010;
+  object-fit: cover; /* Cover the container */
+}
+
+.video-label.below-video {
+  color: #aeaeae; /* Lighter grey */
+  padding-top: 5px; /* Space above label */
+  font-size: 0.85em;
+  text-align: center;
+  width: 90%;
+  margin-top: 0; /* Remove default margin if any */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Self View specific wrapper and container */
+.self-view-wrapper {
+  position: absolute;
+  width: clamp(140px, 16vw, 200px); /* Adjusted size */
+  bottom: calc(70px + 15px); /* Controls bar height + padding */
+  right: 15px;
+  z-index: 20;
+  transition: right 0.3s ease-in-out;
+}
+.self-view-wrapper .video-container { 
+  border: 2px solid #555; 
+}
+.meeting-view.panel-is-open .self-view-wrapper {
+  right: calc(300px + 15px); /* Panel width + padding */
+}
+
+/* Placeholder for camera off */
+.camera-off-placeholder {
+  width: 100%; height: 100%; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; background-color: #2a2d31; /* Darker placeholder */
+  color: #777c82; border-radius: inherit;
+}
+.camera-off-placeholder .fa-user-secret,
+.camera-off-placeholder .fa-user-circle {
+  font-size: clamp(2.5em, 10vw, 4em); margin-bottom: 8px;
+}
+.camera-off-placeholder p { font-size: clamp(0.75em, 2.5vw, 0.9em); margin: 0; color: #8a9199; }
+
+/* Placeholder when waiting for others */
+.main-participant-placeholder-wrapper { display: flex; flex-grow: 1; justify-content: center; align-items: center; }
+.video-placeholder.main-participant-placeholder { border: none; font-size: 1.3rem; color: #5f6368; }
+
+
+/* --- DYNAMIC LAYOUT FOR REMOTE PARTICIPANTS (Applied to .video-item-wrapper) --- */
+.participant-view-wrapper .video-element { object-fit: cover; } /* Gallery default */
+.participant-count-0 .participant-view-wrapper { display: none; }
+
+/* 1 Remote Participant */
+.video-area.participant-count-1 { justify-content: center; align-items: center; }
+.participant-count-1 .stream-count-1 { /* Targets the wrapper */
+  width: 80%; max-width: 1000px;
+}
+.participant-count-1 .stream-count-1 .video-element { object-fit: contain; }
+
+/* 2 Remote Participants: Side by side */
+.video-area.participant-count-2 { justify-content: center; align-items: center; flex-wrap: nowrap; }
+.participant-count-2 .stream-count-2 {
+  flex-basis: calc(50% - 10px); /* Adjusted for gap */
+  max-width: calc(50% - 10px);
+  width: calc(50% - 10px); /* Explicit width can help */
+}
+
+/* 3 Remote Participants: Side by side */
+.video-area.participant-count-3 { justify-content: center; align-items: center; flex-wrap: nowrap; }
+.participant-count-3 .stream-count-3 {
+  flex-basis: calc(33.333% - 11px); /* Adjusted more for gap */
+  max-width: calc(33.333% - 11px);
+  width: calc(33.333% - 11px);
+}
+
+/* 4 Remote Participants: 2x2 grid */
+.video-area.participant-count-4 { justify-content: center; align-items: center; flex-wrap: wrap; }
+.participant-count-4 .stream-count-4 {
+  flex-basis: calc(50% - 10px);
+  max-width: calc(50% - 10px);
+  width: calc(50% - 10px);
+}
+
+/* 5 or 6 Participants: Aim for 3 per row */
+.video-area.participant-count-5,
+.video-area.participant-count-6 { justify-content: center; align-items: center; flex-wrap: wrap; }
+.participant-count-5 .stream-count-5,
+.participant-count-6 .stream-count-6 {
+  flex-basis: calc(33.333% - 8px);
+  max-width: calc(33.333% - 8px);
+  width: calc(33.333% - 8px);
+}
+
+/* More than 6 participants */
+.video-area.participant-count-many { justify-content: center; align-items: center; flex-wrap: wrap; }
+.participant-count-many .stream-count-many {
+  flex-basis: calc(33.333% - 8px); /* Default to 3 columns */
+  max-width: calc(33.333% - 8px);
+  width: calc(33.333% - 8px);
+}
+
+/* Pin Button Styling */
+.pin-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* Ensure it's above the video element */
+  transition: background-color 0.2s ease;
+}
+
+.pin-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.pin-button.pinned {
+  background-color: #8ab4f8; /* Same as active control button */
+  color: #202124;
+}
+
+/* Side Panel Styling - CRITICAL FOR VISIBILITY */
+.side-panel {
+  width: 300px;
+  border-left: 1px solid #3a3f4b;
+  display: flex; /* !!! IMPORTANT !!! */
+  flex-direction: column; /* Stack header, content, footer */
+  background-color: #26292e; /* Panel background */
+  height: calc(100vh - 70px); /* Adjusted height to account for controls bar */
+  position: absolute; /* Position relative to meeting-view */
+  right: 0;
+  top: 0;
+  z-index: 50;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.5);
+  transform: translateX(100%); /* Start hidden off-screen right */
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  color: #e0e0e0;
+}
+/* This class on the panel itself makes it slide in */
+.side-panel.is-active {
+  transform: translateX(0);
+}
+
+.panel-header {
+  padding: 10px 15px;
+  background-color: #31353d;
+  border-bottom: 1px solid #4a4f58;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0; /* Prevent header shrinking */
+  height: 50px; /* Give header a fixed height */
+  box-sizing: border-box;
+}
+.panel-header h3 { margin: 0; font-size: 1.1em; font-weight: 500; color: #f1f3f4; }
+.panel-close-button { background: none; border: none; color: #bdc1c6; font-size: 1.2em; cursor: pointer; padding: 5px; }
+.panel-close-button:hover { color: #ffffff; }
+
+/* Host Room Info in Panel Header */
+.host-room-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85em;
+  color: #bdc1c6; /* Subtler color for info */
+  margin-left: auto; /* Pushes it to the left of the close button if header is flex space-between */
+  margin-right: 15px; /* Space before close button */
+}
+
+.copy-room-id-button {
+  background: none;
+  border: 1px solid #5f6368;
+  color: #bdc1c6;
+  border-radius: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9em;
+}
+
+.copy-room-id-button:hover {
+  background-color: #3c4043;
+  color: #e0e0e0;
+}
+
+.copy-feedback {
+  font-size: 0.8em;
+  color: #4CAF50; /* Green for success */
+  margin-left: 5px;
+}
+
+/* Container for scrollable content in panels */
+.chat-messages-container, .participants-list {
+  flex-grow: 1; /* !!! CRITICAL: Allows this area to fill space !!! */
+  overflow-y: auto; /* Allows scrolling */
+  padding: 10px; /* Padding inside the scroll area */
+  background-color: #202124; /* Slightly different background for content */
+}
+.participants-list { list-style: none; margin: 0; padding: 0; }
+
+
+/* Chat message styling */
+.chat-message-wrapper { display: flex; margin-bottom: 10px; }
+.my-message-wrapper { justify-content: flex-end; }
+.other-message-wrapper { justify-content: flex-start; }
+.system-message-wrapper { justify-content: center; }
+.chat-message { padding: 8px 12px; border-radius: 18px; max-width: 85%; line-height: 1.4; }
+.my-message { background-color: #8ab4f8; color: #202124; align-self: flex-end; border-bottom-right-radius: 4px; }
+.other-message { background-color: #3c4043; color: #e8eaed; align-self: flex-start; border-bottom-left-radius: 4px; }
+.system-message { background-color: transparent; color: #9aa0a6; font-style: italic; text-align: center; padding: 5px 0; }
+.message-sender { font-weight: bold; font-size: 0.75em; margin-bottom: 3px; display: block; }
+.my-message .message-sender { color: #e8f0fe; }
+.other-message .message-sender { color: #bdc1c6; }
+.system-message .message-sender { display: none; }
+.message-text { font-size: 0.9em; word-wrap: break-word; }
+.message-timestamp { font-size: 0.65em; color: #80868b; display: block; text-align: right; margin-top: 4px; }
+.my-message .message-timestamp { color: #e8f0fe; opacity: 0.8; }
+.other-message .message-timestamp { color: #9aa0a6; }
+.system-message .message-timestamp { display: none; }
+.no-messages, .no-participants { text-align: center; color: #70757a; padding: 25px; font-style: italic; font-size: 0.9em;}
+
+
+/* --- Pinned Mode Layout --- */
+.video-area.pinned-active {
+  flex-direction: row; /* Pinned video on one side, thumbnails on the other */
+  justify-content: flex-start; /* Align to the start in pinned mode */
+  align-items: stretch; /* Stretch to fill the container height */
+}
+
+.pinned-video-stage {
+  flex-grow: 1; /* Takes up most of the space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px; /* Keep consistent padding */
+  height: 100%; /* Fill the height of video-area */
+  box-sizing: border-box;
+  min-width: 0; /* Allow the container to shrink if needed */
+}
+
+.pinned-video-stage .video-item-wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px; /* Max width for pinned video */
+}
+
+.pinned-video-stage .video-item-wrapper .video-container {
+  border: 2px solid #8ab4f8; /* Highlight pinned video */
+  height: 100%; /* Take full height */
+}
+
+.pinned-video-stage .video-item-wrapper .video-element {
+  object-fit: contain; /* Ensure whole video is visible */
+}
+
+.thumbnail-gallery {
+  width: 220px; /* Fixed width for thumbnail sidebar */
+  height: 100%; /* Full height of video-area */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px 10px;
+  overflow-y: auto;
+  background-color: #1c1c1c; /* Slightly different background for thumbnails */
+  border-left: 1px solid #303030;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.thumbnail-gallery .video-item-wrapper {
+  width: 100%;
+  /* aspect-ratio will be handled by video-container inside it */
+}
+
+.thumbnail-gallery .video-container {
+  aspect-ratio: 16 / 9; /* Maintain aspect ratio for thumbnails */
+  border: 1px solid #404040;
+}
+
+.thumbnail-gallery .video-label.below-video {
+  font-size: 0.75em; /* Smaller labels for thumbnails */
+  padding-top: 3px;
+}
+
+/* Adjust self-view when in pinned mode to be part of thumbnails */
+.video-area.pinned-active .self-view-wrapper {
+  position: relative; /* No longer absolute */
+  width: 100%; /* Takes full width of its slot in thumbnail gallery */
+  bottom: auto;
+  right: auto;
+  margin-bottom: 5px; /* Add some space if it's the first/last item */
+  /* z-index default will be fine here */
+}
+
+.video-area.pinned-active .self-view-wrapper .video-container {
+  border: 1px solid #555; /* Regular border, not highlight */
+}
+
+/* Hide the main placeholder when pinned mode is active */
+.video-area.pinned-active .main-participant-placeholder-wrapper {
+  display: none;
+}
+
+.chat-input-form { /* Stays at bottom */
+  display: flex; align-items: center; padding: 10px 12px;
+  border-top: 1px solid #3a3f4b; background-color: #2c3038;
+  flex-shrink: 0; /* Prevent shrinking */
+  height: 60px; /* Fixed height */
+  box-sizing: border-box;
+}
+
+.chat-input-form input[type="text"] {
+  flex-grow: 1;
+  padding: 10px 12px;
+  border: 1px solid #4a4f58;
+  border-radius: 20px; /* Pill shape */
+  background-color: #3c4043; /* Dark input background */
+  color: #e0e0e0; /* Light text */
+  font-size: 0.9em;
+  margin-right: 8px; /* Space before button */
+  outline: none;
+}
+
+.chat-input-form input[type="text"]::placeholder {
+  color: #8a9199; /* Lighter placeholder text */
+}
+
+.chat-input-form input[type="text"]:focus {
+  border-color: #8ab4f8; /* Highlight on focus */
+  box-shadow: 0 0 0 2px rgba(138, 180, 248, 0.3); /* Subtle glow */
+}
+
+.chat-input-form button {
+  background-color: #8ab4f8; /* Accent color for send */
+  color: #202124; /* Dark icon/text on accent */
+  border: none;
+  border-radius: 50%; /* Circular button */
+  width: 40px;
+  height: 40px;
+  font-size: 1.1em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0; /* Prevent button shrinking */
+}
+
+.chat-input-form button:hover {
+  background-color: #a1c9ff; /* Lighter on hover */
+}
+
+.chat-input-form button:disabled {
+  background-color: #5f6368;
+  cursor: not-allowed;
+}
+
+/* Participants Panel Specific Styles */
+.participant-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 15px;
+  border-bottom: 1px solid #3a3f4b;
+  font-size: 0.9em;
+  color: #e0e0e0;
+  gap: 12px;
+}
+
+.participant-item:last-child {
+  border-bottom: none;
+}
+
+.participant-icon {
+  margin-top: 2px;
+  font-size: 1.2em;
+  color: #adb5bd;
+  flex-shrink: 0;
+}
+
+.participant-info {
+  flex-grow: 1;
+  min-width: 0; /* Allows text truncation to work */
+}
+
+.participant-name {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.analysis-results {
+  background-color: #2a2d31;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 6px;
+  font-size: 0.85em;
+}
+
+.analysis-status {
+  color: #ffc107;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.analysis-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #bdc1c6;
+}
+
+.analysis-detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px solid #3a3f4b;
+}
+
+.analysis-detail-item:last-child {
+  border-bottom: none;
+}
+
+.analysis-detail-item:before {
+  content: attr(data-label);
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* Host actions within participant item */
+.host-participant-actions {
+  margin-left: auto;
+  padding-left: 10px;
+  flex-shrink: 0;
+}
+
+/* Waiting for Approval Overlay */
+.waiting-approval-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 200; /* Ensure it's above everything */
+  color: #e0e0e0;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.waiting-approval-overlay h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+/* Meeting Ended Overlay */
+.meeting-ended-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 200; /* Ensure it's above everything */
+  color: #e0e0e0;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.meeting-ended-overlay h2 {
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+/* Pending Join Requests Section (inside Participants Panel) */
+.pending-requests-section {
+  padding: 10px 15px;
+  border-bottom: 1px solid #3a3f4b; /* Separator from main participants list */
+  background-color: #2a2d31; /* Slightly different background */
+}
+
+.pending-requests-section h4 {
+  margin: 0 0 10px 0;
+  font-size: 0.9em;
+  color: #bdc1c6;
+  font-weight: 500;
+}
+
+.pending-requests-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pending-request-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 0.85em;
+}
+
+.pending-request-item span {
+  color: #e0e0e0;
+}
+
+.admission-button {
+  padding: 5px 10px;
+  margin-left: 8px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admission-button.accept {
+  background-color: #4CAF50; /* Green */
+  color: white;
+}
+.admission-button.accept:hover {
+  background-color: #45a049;
+}
+
+.admission-button.deny {
+  background-color: #f44336; /* Red */
+  color: white;
+}
+.admission-button.deny:hover {
+  background-color: #d32f2f;
+}
+
+/* Analysis status text within participant item */
+.analysis-status-text {
+  margin-left: 8px;
+  font-size: 0.75em;
+  color: #ffc107; /* Amber/yellow for status */
+  font-style: italic;
+}
+
+/* Controls Bar and Buttons - Standard UI Button Style */
+.controls-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #2a2a2e;
+  border-top: 1px solid #3a3a3a;
+  gap: 12px;
+  height: 70px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  box-sizing: border-box;
+}
+.control-button {
+  background-color: #4a4e54; /* Slightly lighter base */
+  color: #e0e0e0;
+  border: none; /* Remove border for flatter look */
+  border-radius: 6px; /* Rounded rectangle */
+  min-width: 50px; height: 48px; padding: 0 10px; font-size: 1.2em;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color 0.2s ease;
+  position: relative; line-height: 1;
+}
+.control-button:hover { background-color: #5f6368; }
+.control-button.is-off { background-color: #d9534f; color: white; }
+.control-button.is-off:hover { background-color: #c9302c; }
+.control-button.is-active { background-color: #8ab4f8; color: #202124; } /* Google blue */
+.control-button.is-active:hover { background-color: #a1c9ff; }
+.control-button.end-call { background-color: #ea4335; color: white; }
+.control-button.end-call:hover { background-color: #d93025; }
+
+.sharing-indicator-dot { /* ... same ... */ }
+.control-button.is-active .fa-desktop { color: #69ff69; }
+.control-button.is-active .sharing-indicator-dot { animation: pulse 1.5s infinite; }
+@keyframes pulse { /* ... same ... */ }
+
+/* New Light Theme Styles for Join/Create Meeting Pages */
+.join-page-container /* This class is used in CreateMeetingPage.jsx and JoinMeetingPage.jsx */ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  flex-grow: 1;
+  width: 100%;
+  max-width: 100%;
+}
+
+.join-form-card {
+  background-color: #ffffff; /* White card for light theme */
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); /* Softer shadow */
+  width: 100%;
+  max-width: 480px;
+  text-align: left;
+}
+
+@media (max-width: 600px) {
+  .join-form-card {
+    padding: 1.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}
+
+.form-title {
+  font-size: 2.2rem;
+  color: #2c3e50; /* Darker title color, matches navbar */
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .form-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.join-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.join-form .form-label {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #555; /* Slightly lighter label color */
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.join-form .form-input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #d1d5db; /* Light gray border */
+  background-color: #f9fafb; /* Very light input background */
+  color: #333;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-form .form-input::placeholder {
+  color: #9ca3af; /* Placeholder text color */
+}
+
+.join-form .form-input:focus {
+  outline: none;
+  border-color: #3498db; /* Navbar accent blue */
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.join-form .checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.join-form .form-checkbox {
+  margin-right: 0.75rem;
+  width: 20px;
+  height: 20px;
+  accent-color: #3498db; /* Navbar accent blue */
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.join-form .form-label-checkbox {
+  font-size: 0.95rem;
+  color: #444;
+  cursor: pointer;
+}
+
+.join-button.primary-button {
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  background-color: #3498db; /* Navbar accent blue */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.join-button.primary-button:hover {
+  background-color: #2980b9; /* Darker shade for hover */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.join-button.primary-button:active {
+  background-color: #2577ae;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ... (Keep existing .meeting-view and other dark theme styles below this) ... */
+
+/* ---- Landing Page Styles ---- */
+.landing-page {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+.hero-section, 
+.features-section,
+.how-it-works-section,
+.testimonials-section,
+.pricing-section,
+.cta-section,
+.landing-footer {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(to right bottom, #3498db, #2c3e50);
+  color: white;
+  padding: 5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-section h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-section p {
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  animation: fadeInUp 0.8s ease-out 0.2s backwards;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  animation: fadeInUp 0.8s ease-out 0.4s backwards;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 0.8rem 1.8rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.create-button {
+  background-color: white;
+  color: #3498db;
+}
+
+.create-button:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.join-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+.join-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Features Section */
+.features-section {
+  padding: 5rem 2rem;
+  background-color: white;
+  text-align: center;
+}
+
+.features-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #2c3e50;
+}
+
+.feature-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-category {
+  flex: 1;
+  max-width: 500px;
+}
+
+.feature-category h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+.feature-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.feature-item {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 0.8rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.student-icon {
+  background-color: rgba(233, 30, 99, 0.1);
+  color: #e91e63;
+}
+
+.company-icon {
+  background-color: rgba(63, 81, 181, 0.1);
+  color: #3f51b5;
+}
+
+.feature-item h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.feature-item p {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* How It Works Section */
+.how-it-works-section {
+  padding: 5rem 2rem;
+  background-color: #f8f9fa;
+  text-align: center;
+}
+
+.how-it-works-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #2c3e50;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.step {
+  flex: 1;
+  max-width: 300px;
+  background-color: white;
+  border-radius: 0.8rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.step-number {
+  width: 3rem;
+  height: 3rem;
+  line-height: 3rem;
+  background-color: #3498db;
+  color: white;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 auto 1.5rem;
+}
+
+.step h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.step p {
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+  padding: 5rem 2rem;
+  background-color: white;
+  text-align: center;
+}
+
+.testimonials-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+  color: #2c3e50;
+}
+
+.testimonials {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonial {
+  flex: 1;
+  max-width: 500px;
+  background-color: #f8f9fa;
+  border-radius: 0.8rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial p {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-author .name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.testimonial-author .title {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Call to Action */
+.cta-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(to right bottom, #3498db, #2c3e50);
+  color: white;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.cta-section p {
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.create-cta {
+  background-color: white;
+  color: #3498db;
+}
+
+.create-cta:hover {
+  background-color: #f8f9fa;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.join-cta {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+.join-cta:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+.landing-footer {
+  background-color: #2c3e50;
+  color: white;
+  padding: 3rem 2rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: white;
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .feature-grid,
+  .steps,
+  .testimonials {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .feature-category,
+  .step,
+  .testimonial {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+  }
+  
+  .hero-buttons,
+  .cta-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .features-section h2,
+  .how-it-works-section h2,
+  .testimonials-section h2,
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Pricing Section Styles */
+.pricing-section {
+  padding: 5rem 2rem;
+  background-color: #f0f4f8;
+  text-align: center;
+}
+
+.pricing-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.pricing-subtitle {
+  font-size: 1.2rem;
+  color: #546e7a;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+/* Pricing toggle */
+.pricing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  gap: 12px;
+}
+
+.pricing-toggle-label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #3498db;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background-color: #a855f7;
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(28px);
+}
+
+/* Show student pricing by default, hide company pricing */
+.pricing-cards.student-pricing {
+  display: flex;
+  justify-content: center;
+}
+
+.pricing-cards.company-pricing {
+  display: none;
+}
+
+/* When toggle is checked (company pricing) */
+#pricing-toggle:checked ~ .pricing-cards.student-pricing {
+  display: none;
+}
+
+#pricing-toggle:checked ~ .pricing-cards.company-pricing {
+  display: flex;
+}
+
+.pricing-cards {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pricing-card {
+  flex: 1;
+  max-width: 350px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+/* Student plan card (centered) */
+.student-pricing .pricing-card {
+  max-width: 450px;
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.pricing-card.featured {
+  border: 2px solid #3498db;
+  transform: scale(1.05);
+}
+
+.pricing-card.featured:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+/* Interview limit text */
+.interview-limit {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.popular-tag {
+  position: absolute;
+  top: 12px;
+  right: -30px;
+  background: #3498db;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 5px 30px;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-card-header {
+  padding: 2rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.pricing-card-header h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.pricing-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.price {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #3498db;
+}
+
+.period {
+  font-size: 1rem;
+  color: #95a5a6;
+  margin-left: 5px;
+}
+
+.pricing-card-body {
+  padding: 2rem 1.5rem;
+}
+
+.pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pricing-features li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #4e5d6c;
+}
+
+.pricing-features li:last-child {
+  margin-bottom: 0;
+}
+
+.pricing-features svg {
+  width: 18px;
+  height: 18px;
+  color: #3498db;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.pricing-card-footer {
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.pricing-btn {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: white;
+  color: #3498db;
+  border: 2px solid #3498db;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.pricing-btn:hover {
+  background-color: #3498db;
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+.featured-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.featured-btn:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+}
+
+/* Add responsive styles for pricing cards */
+@media (max-width: 992px) {
+  .pricing-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pricing-card {
+    max-width: 100%;
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  
+  .pricing-card.featured {
+    transform: scale(1);
+  }
+  
+  .pricing-card.featured:hover {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2.5rem;
+  }
+  
+  .hero-section p {
+    font-size: 1.2rem;
+  }
+  
+  .hero-buttons,
+  .cta-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .features-section h2,
+  .how-it-works-section h2,
+  .testimonials-section h2,
+  .pricing-section h2,
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Authentication Pages Styles */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.auth-main {
+  width: 100%;
+  max-width: 28rem;
+  margin-bottom: 2rem;
+}
+
+.auth-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-logo {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+}
+
+.auth-logo span {
+  font-size: 1.875rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #3498db, #2c3e50);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.social-auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #4b5563;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.social-button:hover {
+  background-color: #f9fafb;
+}
+
+.social-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+}
+
+.linkedin-icon {
+  color: #0077b5;
+}
+
+.auth-divider {
+  position: relative;
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.auth-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.auth-divider span {
+  position: relative;
+  padding: 0 0.5rem;
+  background-color: white;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.form-group input {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #1f2937;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+}
+
+.password-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.forgot-password {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #3498db;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+  color: #2980b9;
+}
+
+.form-checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.form-checkbox-group input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  accent-color: #3498db;
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.form-terms-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.form-terms-group input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.125rem;
+  accent-color: #3498db;
+}
+
+.terms-text {
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.terms-link {
+  margin: 0 0.25rem;
+  color: #3498db;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.terms-link:hover {
+  text-decoration: underline;
+  color: #2980b9;
+}
+
+.auth-submit-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(to right, #3498db, #2c3e50);
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.auth-submit-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-alt-action {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.auth-alt-link {
+  margin-left: 0.25rem;
+  color: #3498db;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-alt-link:hover {
+  text-decoration: underline;
+  color: #2980b9;
+}
+
+.auth-footer {
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.auth-footer p {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+@media (max-width: 640px) {
+  .auth-card {
+    padding: 1.5rem;
+  }
+  
+  .auth-logo span {
+    font-size: 1.5rem;
+  }
+  
+  .auth-header h1 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Add this to existing responsive styles */
+@media (max-width: 768px) {
+  .features-section h2,
+  .how-it-works-section h2,
+  .testimonials-section h2,
+  .pricing-section h2,
+  .cta-section h2 {
+    font-size: 2rem;
+  }
+}
+
+/* Auth error message */
+.auth-error {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  padding: 0.8rem 1rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  text-align: center;
+  border-left: 3px solid #e74c3c;
+}
+
+/* Radio button group styling */
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #4b5563;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #3498db;
+}
+
+/* Disable styles for form elements */
+.auth-submit-button:disabled,
+.social-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background-color: #94a3b8;
+}
+
+.auth-submit-button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}

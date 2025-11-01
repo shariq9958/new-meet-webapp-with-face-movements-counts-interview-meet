@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourMeetApp - In Meeting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow: hidden; /* Prevent scrollbars from main layout */ }
+        /* Custom scrollbar for sidebar content */
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar-content::-webkit-scrollbar-track {
+            background: #2d3748; /* slate-800 */
+        }
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: #4a5568; /* slate-600 */
+            border-radius: 3px;
+        }
+        .sidebar-content::-webkit-scrollbar-thumb:hover {
+            background: #718096; /* slate-500 */
+        }
+        /* Video placeholder aspect ratio */
+        .video-placeholder {
+            position: relative;
+            width: 100%;
+            /* Default to 16:9 aspect ratio for main video */
+            padding-bottom: 56.25%; 
+            background-color: #1a202c; /* slate-900 */
+            border-radius: 0.5rem; /* rounded-lg */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096; /* slate-500 */
+            overflow: hidden; /* Ensure video elements fit */
+        }
+        .video-placeholder.flex-grow { /* Ensure main video takes available space */
+             padding-bottom: 0; /* Remove padding if flex-grow is handling height */
+        }
+        .video-placeholder video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the area, might crop */
+            border-radius: 0.5rem; /* Ensure video also has rounded corners if container does */
+        }
+        .self-view { /* This class primarily sets width and height for the self-view box */
+            width: 120px; 
+            height: 90px; 
+            padding-bottom: 0; /* Override aspect ratio padding from .video-placeholder for self-view */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .self-view {
+                width: 160px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white h-screen flex flex-col">
+
+    <header class="bg-slate-800 py-2 px-4 shadow-md z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 id="roomNameDisplay" class="text-lg font-semibold text-purple-400">Interview with Jane Doe</h1>
+            <div id="meetingTimer" class="text-sm text-gray-400">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="flex-grow flex overflow-hidden">
+        <div id="videoSection" class="flex-grow flex flex-col items-center justify-center p-2 sm:p-4 transition-all duration-300 ease-in-out">
+            <div id="mainVideoContainer" class="video-placeholder flex-grow relative w-full">
+                <video id="remoteVideo" autoplay playsinline class="rounded-lg"></video>
+                <span class="absolute text-2xl" id="remoteVideoPlaceholderText">Interviewee Video</span>
+                <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded z-10">
+                    Jane Doe
+                </div>
+
+                <div id="selfViewContainer" 
+                     class="video-placeholder self-view shadow-xl border-2 border-purple-500 absolute bottom-4 left-4 z-20 rounded-lg">
+                    <video id="localVideo" autoplay playsinline muted class="rounded-lg"></video>
+                     <span class="absolute text-sm" id="localVideoPlaceholderText">Your Video</span>
+                     <div class="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-1 py-0.5 rounded z-10">
+                        You (Host)
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        <aside id="sidebar" class="bg-slate-800 w-full sm:w-80 md:w-96 shadow-xl flex flex-col transition-all duration-300 ease-in-out h-full sm:h-auto sm:max-h-full">
+            <div class="flex border-b border-slate-700">
+                <button data-tab="analysis" class="sidebar-tab flex-1 py-3 px-2 text-sm font-medium text-purple-400 border-b-2 border-purple-400 hover:bg-slate-700 transition-colors">
+                    AI Analysis
+                </button>
+                <button data-tab="chat" class="sidebar-tab flex-1 py-3 px-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-slate-700 transition-colors">
+                    Chat
+                </button>
+                <button data-tab="participants" class="sidebar-tab flex-1 py-3 px-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-slate-700 transition-colors">
+                    Participants (2)
+                </button>
+            </div>
+
+            <div class="flex-grow overflow-y-auto sidebar-content">
+                <div id="analysisPanel" data-content="analysis" class="p-4 space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg font-semibold text-purple-300">Real-time Interview Analysis</h3>
+                        <span id="analysisStatus" class="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">Active</span>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Engagement Score</label>
+                        <div class="w-full bg-slate-700 rounded-full h-2.5">
+                            <div id="engagementBar" class="bg-green-500 h-2.5 rounded-full transition-all duration-500" style="width: 75%"></div>
+                        </div>
+                        <p id="engagementValue" class="text-right text-xs text-green-400 mt-1">75%</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Eye Contact</label>
+                        <div class="flex items-center space-x-2">
+                            <div id="eyeContactIndicator" class="w-4 h-4 rounded-full bg-green-500 animate-pulse"></div>
+                            <span id="eyeContactStatus" class="text-sm text-gray-400">Good</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Detected Sentiment</label>
+                        <div class="flex items-center space-x-2 p-2 bg-slate-700 rounded-md">
+                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.79 4 4s-1.79 4-4 4c-1.742 0-3.223-.835-3.772-2M12 20.25a.75.75 0 01.75-.75H12a.75.75 0 01.75.75v.008c0 .414-.336.75-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm0 0H12a.75.75 0 000 1.5h.008a.75.75 0 00.75-.75v-.008c0-.414-.336.75-.75-.75H12zM12 4.5A.75.75 0 0112.75 3h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H12a.75.75 0 01-.75-.75V4.5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18a6 6 0 100-12 6 6 0 000 12z"></path></svg>
+                            <span id="sentimentStatus" class="text-sm text-yellow-400">Neutral / Attentive</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Key Metrics (Example)</label>
+                        <ul class="space-y-1 text-xs text-gray-400 list-disc list-inside">
+                            <li>Clarity of Speech: <span class="text-green-400">Good</span></li>
+                            <li>Filler Words: <span class="text-yellow-400">Moderate</span></li>
+                            <li>Pacing: <span class="text-green-400">Optimal</span></li>
+                        </ul>
+                    </div>
+                     <button id="startStopAnalysis" class="w-full mt-4 text-sm bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                        Stop Analysis
+                    </button>
+                </div>
+
+                <div id="chatPanel" data-content="chat" class="hidden p-4 flex flex-col h-full">
+                    <h3 class="text-lg font-semibold text-purple-300 mb-3">Meeting Chat</h3>
+                    <div id="chatMessagesContainer" class="flex-grow space-y-3 overflow-y-auto mb-3 pr-1">
+                        <div class="text-xs">
+                            <p><strong class="text-teal-400">Jane Doe:</strong> Hello everyone! Glad to be here.</p>
+                            <p class="text-gray-500">10:02 AM</p>
+                        </div>
+                        <div class="text-xs text-right">
+                            <p><strong class="text-purple-400">You:</strong> Welcome, Jane! We're excited to chat with you.</p>
+                            <p class="text-gray-500">10:03 AM</p>
+                        </div>
+                        </div>
+                    <form id="chatForm" class="mt-auto flex">
+                        <input type="text" id="chatInput" placeholder="Type your message..." class="flex-grow bg-slate-700 border border-slate-600 text-gray-200 placeholder-gray-500 px-3 py-2 rounded-l-md text-sm focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500">
+                        <button type="submit" id="sendChatMessage" class="bg-purple-600 hover:bg-purple-700 text-white font-medium px-4 py-2 rounded-r-md text-sm transition-colors">Send</button>
+                    </form>
+                </div>
+
+                <div id="participantsPanel" data-content="participants" class="hidden p-4 space-y-3">
+                    <h3 class="text-lg font-semibold text-purple-300 mb-3">Participants (<span id="participantCount">2</span>)</h3>
+                    <ul id="participantList" class="space-y-2">
+                        <li class="flex items-center justify-between p-2 bg-slate-700 rounded-md">
+                            <div class="flex items-center">
+                                <span class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-sm font-semibold mr-3">JD</span>
+                                <span class="text-sm text-gray-200">Jane Doe (Interviewee)</span>
+                            </div>
+                            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8h-1a6 6 0 11-5.73-4.79l-.27.9A5 5 0 017 8v.5A6.97 6.97 0 0011 14.93zM12 3a4 4 0 00-4 4v4a4 4 0 108 0V7a4 4 0 00-4-4z"></path></svg>
+                        </li>
+                        <li class="flex items-center justify-between p-2 bg-slate-700 rounded-md">
+                             <div class="flex items-center">
+                                <span class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-sm font-semibold mr-3">U</span>
+                                <span class="text-sm text-gray-200">You (Host)</span>
+                            </div>
+                            <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93A7.001 7.001 0 0017 8h-1a6 6 0 11-5.73-4.79l-.27.9A5 5 0 017 8v.5A6.97 6.97 0 0011 14.93zM12 3a4 4 0 00-4 4v4a4 4 0 108 0V7a4 4 0 00-4-4z"></path></svg>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="bg-slate-800 py-3 sm:py-4 px-4 shadow-top z-10">
+        <div class="container mx-auto flex justify-center items-center space-x-2 sm:space-x-3 md:space-x-4">
+            <button id="micBtn" class="control-button p-2 sm:p-3 rounded-full bg-slate-700 hover:bg-purple-600 transition-colors" title="Mute/Unmute Microphone">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" id="micIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" id="micOffIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z M6.717 6.717A7.003 7.003 0 003 11v0M17.283 6.717A7.003 7.003 0 0121 11v0M12 18L12 5M5 12l14 0"></path></svg>
+            </button>
+            <button id="camBtn" class="control-button p-2 sm:p-3 rounded-full bg-slate-700 hover:bg-purple-600 transition-colors" title="Start/Stop Camera">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" id="camIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h2m2 0h4m2 0h2m0 0V4m0 2v2m0 0v2m0 0V8m0 0H4m0 0v12h12V8H4z"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" id="camOffIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h2m2 0h4m2 0h2m0 0V4m0 2v2m0 0v2m0 0V8m0 0H4m0 0v12h12V8H4z M1 1l22 22"></path></svg>
+            </button>
+            <button id="shareScreenBtn" class="control-button p-2 sm:p-3 rounded-full bg-slate-700 hover:bg-purple-600 transition-colors hidden sm:inline-flex" title="Share Screen (Future)">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            </button>
+            <button id="sidebarToggleBtn" class="control-button p-2 sm:p-3 rounded-full bg-slate-700 hover:bg-purple-600 transition-colors" title="Toggle Sidebar">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" id="sidebarIconOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white hidden" id="sidebarIconClose" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <button id="endCallBtn" class="control-button p-2 sm:p-3 rounded-full bg-red-600 hover:bg-red-700 transition-colors" title="End Call">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8l6-6M22 16l-6-6M8 8H3a1 1 0 00-1 1v6a1 1 0 001 1h5l7 5V3L8 8z"></path></svg>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // Sidebar Tab and Content Toggle Logic
+        const sidebarTabs = document.querySelectorAll('.sidebar-tab');
+        const sidebarContents = {
+            analysis: document.getElementById('analysisPanel'),
+            chat: document.getElementById('chatPanel'),
+            participants: document.getElementById('participantsPanel')
+        };
+        let activeTab = 'analysis'; // Default active tab
+
+        sidebarTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                if (tabName === activeTab) return;
+
+                sidebarTabs.forEach(t => {
+                    t.classList.remove('text-purple-400', 'border-purple-400', 'border-b-2');
+                    t.classList.add('text-gray-400');
+                });
+                tab.classList.add('text-purple-400', 'border-purple-400', 'border-b-2');
+                tab.classList.remove('text-gray-400');
+
+                Object.values(sidebarContents).forEach(content => content.classList.add('hidden'));
+                sidebarContents[tabName].classList.remove('hidden');
+                
+                activeTab = tabName;
+            });
+        });
+
+        // Sidebar Toggle Logic
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const sidebar = document.getElementById('sidebar');
+        const videoSection = document.getElementById('videoSection');
+        const sidebarIconOpen = document.getElementById('sidebarIconOpen');
+        const sidebarIconClose = document.getElementById('sidebarIconClose');
+        let isSidebarOpen = true; 
+
+        function updateSidebarView() {
+            if (window.innerWidth < 640) { // sm breakpoint
+                if (isSidebarOpen) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('absolute', 'inset-0', 'z-20'); 
+                    videoSection.classList.add('hidden'); 
+                } else {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('absolute', 'inset-0', 'z-20');
+                    videoSection.classList.remove('hidden');
+                }
+            } else { 
+                sidebar.classList.remove('absolute', 'inset-0', 'z-20'); 
+                videoSection.classList.remove('hidden'); 
+
+                if (isSidebarOpen) {
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('sm:w-80', 'md:w-96'); 
+                    // Adjust video section width to make space for the sidebar
+                    // This uses Tailwind's theme spacing values (space.80 for w-80, space.96 for w-96)
+                    videoSection.classList.remove('flex-grow'); 
+                    videoSection.classList.add('flex-grow-0', 'w-[calc(100%-theme(spacing.80))]', 'md:w-[calc(100%-theme(spacing.96))]'); 
+                } else {
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('sm:w-80', 'md:w-96');
+                    videoSection.classList.add('flex-grow'); 
+                    videoSection.classList.remove('flex-grow-0', 'w-[calc(100%-theme(spacing.80))]', 'md:w-[calc(100%-theme(spacing.96))]');
+                }
+            }
+            sidebarIconOpen.classList.toggle('hidden', isSidebarOpen);
+            sidebarIconClose.classList.toggle('hidden', !isSidebarOpen);
+        }
+        
+        sidebarToggleBtn.addEventListener('click', () => {
+            isSidebarOpen = !isSidebarOpen;
+            updateSidebarView();
+        });
+
+        window.addEventListener('resize', updateSidebarView);
+        if (window.innerWidth < 640) { 
+            isSidebarOpen = false; 
+        }
+        updateSidebarView(); 
+
+
+        // Meeting Timer Placeholder
+        let seconds = 0;
+        const meetingTimerEl = document.getElementById('meetingTimer');
+        function updateTimer() {
+            seconds++;
+            let hrs = Math.floor(seconds / 3600);
+            let mins = Math.floor((seconds - (hrs * 3600)) / 60);
+            let secs = seconds % 60;
+            if (hrs < 10) hrs = '0' + hrs;
+            if (mins < 10) mins = '0' + mins;
+            if (secs < 10) secs = '0' + secs;
+            if (meetingTimerEl) meetingTimerEl.textContent = `${hrs}:${mins}:${secs}`;
+        }
+        // const timerInterval = setInterval(updateTimer, 1000); // Uncomment to start timer
+
+        // Analysis Start/Stop
+        const analysisBtn = document.getElementById('startStopAnalysis');
+        const analysisStatusEl = document.getElementById('analysisStatus');
+        let isAnalysisActive = true;
+        if(analysisBtn){
+            analysisBtn.addEventListener('click', () => {
+                isAnalysisActive = !isAnalysisActive;
+                analysisBtn.textContent = isAnalysisActive ? 'Stop Analysis' : 'Start Analysis';
+                if(analysisStatusEl){
+                    analysisStatusEl.textContent = isAnalysisActive ? 'Active' : 'Paused';
+                    analysisStatusEl.classList.toggle('bg-green-500', isAnalysisActive);
+                    analysisStatusEl.classList.toggle('bg-yellow-500', !isAnalysisActive);
+                }
+            });
+        }
+        
+        // Mic and Cam toggle 
+        const micBtn = document.getElementById('micBtn');
+        const micIcon = document.getElementById('micIcon');
+        const micOffIcon = document.getElementById('micOffIcon');
+        let isMicOn = true;
+        micBtn?.addEventListener('click', function() {
+            isMicOn = !isMicOn;
+            this.classList.toggle('bg-purple-600', isMicOn); 
+            this.classList.toggle('bg-slate-700', !isMicOn);
+            micIcon.classList.toggle('hidden', !isMicOn);
+            micOffIcon.classList.toggle('hidden', isMicOn);
+            // Add actual mic mute/unmute logic here
+            console.log('Mic toggled:', isMicOn ? 'ON' : 'OFF');
+        });
+
+        const camBtn = document.getElementById('camBtn');
+        const camIcon = document.getElementById('camIcon');
+        const camOffIcon = document.getElementById('camOffIcon');
+        let isCamOn = true;
+        camBtn?.addEventListener('click', function() {
+            isCamOn = !isCamOn;
+            this.classList.toggle('bg-purple-600', isCamOn);
+            this.classList.toggle('bg-slate-700', !isCamOn);
+            camIcon.classList.toggle('hidden', !isCamOn);
+            camOffIcon.classList.toggle('hidden', isCamOn);
+            // Add actual cam enable/disable logic here
+            console.log('Camera toggled:', isCamOn ? 'ON' : 'OFF');
+             // Toggle placeholder visibility
+            const localVideoPlaceholder = document.getElementById('localVideoPlaceholderText');
+            const localVideoElement = document.getElementById('localVideo');
+            if (localVideoPlaceholder && localVideoElement) {
+                // Hide placeholder if cam is ON AND video stream is theoretically attached
+                localVideoPlaceholder.classList.toggle('hidden', isCamOn && (localVideoElement.srcObject != null || localVideoElement.readyState >= 2) );
+            }
+        });
+
+        document.getElementById('endCallBtn')?.addEventListener('click', () => {
+            if(confirm('Are you sure you want to end the call?')) {
+                alert('Ending call...');
+                // clearInterval(timerInterval); // Stop timer if it was started
+                // Add logic to leave the room, clean up connections, etc.
+                // window.location.href = '/'; // Example: Redirect to a post-call page or dashboard
+            }
+        });
+
+        // Chat form submission
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessagesContainer = document.getElementById('chatMessagesContainer');
+
+        if (chatForm) {
+            chatForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const message = chatInput.value.trim();
+                if (message) {
+                    // Display message locally (in a real app, send to server then display)
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('text-xs', 'text-right');
+                    messageDiv.innerHTML = `<p><strong class="text-purple-400">You:</strong> ${message}</p><p class="text-gray-500">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>`;
+                    chatMessagesContainer.appendChild(messageDiv);
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight; // Scroll to bottom
+                    chatInput.value = '';
+                    // Add logic to send message via Socket.IO
+                    console.log('Chat message sent:', message);
+                }
+            });
+        }
+
+        // Placeholder for video stream attachment (replace with your WebRTC logic)
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const localVideoPlaceholderText = document.getElementById('localVideoPlaceholderText');
+        const remoteVideoPlaceholderText = document.getElementById('remoteVideoPlaceholderText');
+
+        // Function to hide placeholder when video data is loaded
+        function handleVideoLoad(videoElement, placeholderElement) {
+            if (videoElement && placeholderElement) {
+                // Check if stream is active and video is ready
+                if (videoElement.srcObject && videoElement.readyState >= 2 ) { // HAVE_CURRENT_DATA or more
+                     placeholderElement.classList.add('hidden');
+                } else {
+                     placeholderElement.classList.remove('hidden');
+                }
+            }
+        }
+        
+        if (localVideo) {
+            localVideo.onloadeddata = () => handleVideoLoad(localVideo, localVideoPlaceholderText);
+            // Initial check for cam on
+            if (isCamOn) { // Assuming isCamOn reflects if we attempted to get media
+                 handleVideoLoad(localVideo, localVideoPlaceholderText);
+            } else {
+                if(localVideoPlaceholderText) localVideoPlaceholderText.classList.remove('hidden');
+            }
+        }
+        if (remoteVideo) {
+            remoteVideo.onloadeddata = () => handleVideoLoad(remoteVideo, remoteVideoPlaceholderText);
+            // Assuming remote video will have a stream if connected
+            // For demo, hide it if we assume a connection will be made
+            // if(remoteVideoPlaceholderText) remoteVideoPlaceholderText.classList.add('hidden'); 
+            // Better to show it until stream is actually there:
+            if(remoteVideoPlaceholderText) remoteVideoPlaceholderText.classList.remove('hidden'); 
+        }
+
+
+    </script>
+</body>
+</html>

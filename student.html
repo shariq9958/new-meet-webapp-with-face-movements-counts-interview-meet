@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourMeetApp for Students - Ace Your Interviews</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .do-animate-fadeInUp {
+            opacity: 0; 
+            animation: fadeInUp 0.6s ease-out forwards; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-pink-600">YourMeetApp</div>
+            <div class="hidden md:flex space-x-4">
+                <a href="#features-student" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                <a href="#pricing-student" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">Pricing</a>
+                <a href="#faq-student" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
+                <a href="#" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-300 ml-2 text-sm">Sign Up / Login</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button-student" class="text-gray-600 hover:text-pink-600 focus:outline-none focus:text-pink-600">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu-student" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#features-student" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">Features</a>
+            <a href="#pricing-student" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">Pricing</a>
+            <a href="#faq-student" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">FAQ</a>
+            <a href="#" class="block bg-pink-500 text-white text-center font-semibold py-3 px-4 m-2 rounded-lg shadow-md hover:bg-pink-600 transition-colors duration-300 text-sm">Sign Up / Login</a>
+        </div>
+    </header>
+
+    <main role="main">
+        <section class="bg-gradient-to-br from-pink-500 via-rose-500 to-orange-400 text-white text-center py-20 md:py-28 px-6">
+            <div class="container mx-auto">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 do-animate-fadeInUp" style="animation-delay: 0.2s;">
+                    Practice Smart, Interview Confidently.
+                </h1>
+                <p class="text-lg sm:text-xl md:text-2xl mb-10 do-animate-fadeInUp" style="animation-delay: 0.4s;">
+                    Get real-time AI feedback on your interview skills, connect for mock interviews, and land your dream job.
+                </p>
+                <div class="do-animate-fadeInUp" style="animation-delay: 0.6s;">
+                    <a href="#pricing-student" class="bg-white text-pink-600 font-semibold py-3 sm:py-4 px-8 sm:px-10 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-pink-300 focus:ring-opacity-50 transition-all duration-300 ease-in-out text-base sm:text-lg">
+                        Get Started for ₹99
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="features-student" class="py-16 sm:py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-12 sm:mb-16">Tools to Help You <span class="text-pink-500">Shine</span></h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
+                    <div class="feature-item group bg-gray-50 p-6 sm:p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:bg-pink-50 transform hover:-translate-y-2 transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.1s;">
+                        <div class="mb-4 sm:mb-6 w-12 h-12 sm:w-16 sm:h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto transition-all duration-300 group-hover:bg-pink-600 group-hover:text-white">
+                           <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 my-3 group-hover:text-pink-700">AI-Powered Feedback</h3>
+                        <p class="text-sm sm:text-base text-gray-600">Receive instant, actionable feedback on your eye contact, engagement, and clarity during practice sessions.</p>
+                    </div>
+                    <div class="feature-item group bg-gray-50 p-6 sm:p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:bg-rose-50 transform hover:-translate-y-2 transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="mb-4 sm:mb-6 w-12 h-12 sm:w-16 sm:h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto transition-all duration-300 group-hover:bg-rose-600 group-hover:text-white">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 my-3 group-hover:text-rose-700">Unlimited Practice</h3>
+                        <p class="text-sm sm:text-base text-gray-600">Practice one-on-one interviews as many times as you need. Perfect your answers and build confidence.</p>
+                    </div>
+                    <div class="feature-item group bg-gray-50 p-6 sm:p-8 rounded-xl shadow-lg text-center hover:shadow-2xl hover:bg-orange-50 transform hover:-translate-y-2 transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.3s;">
+                         <div class="mb-4 sm:mb-6 w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto transition-all duration-300 group-hover:bg-orange-600 group-hover:text-white">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-semibold text-gray-800 my-3 group-hover:text-orange-700">HD Video Quality</h3>
+                        <p class="text-sm sm:text-base text-gray-600">Clear, crisp video and audio for a professional mock interview experience, just like the real thing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing-student" class="py-16 sm:py-20 bg-gradient-to-b from-gray-100 to-gray-200">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-4">Unlock Your Potential</h2>
+                <p class="text-center text-gray-600 mb-10 sm:mb-12 text-base sm:text-lg">Affordable access to powerful interview preparation tools.</p>
+
+                <div class="max-w-md mx-auto do-animate-fadeInUp" style="animation-delay: 0.2s;">
+                     <div class="plan-card bg-white rounded-xl shadow-2xl overflow-hidden transform hover:scale-105 transition-all duration-300 ease-in-out flex flex-col border-4 border-pink-500">
+                        <div class="p-6 sm:p-8 flex-grow">
+                            <h3 class="text-xl sm:text-2xl font-semibold text-pink-700 mb-2 text-center">Student Access Plan</h3>
+                             <div class="text-center my-4">
+                                <span class="text-4xl sm:text-5xl font-extrabold text-gray-800">₹99</span>
+                                <span class="text-gray-500 text-base sm:text-lg">/ month</span>
+                            </div>
+                            <ul class="text-gray-600 space-y-2 sm:space-y-3 mb-6 sm:mb-8 text-sm sm:text-base">
+                                <li class="flex items-center"><svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Unlimited 1-to-1 Practice Sessions</li>
+                                <li class="flex items-center"><svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Real-Time Basic AI Feedback</li>
+                                <li class="flex items-center"><svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>HD Video & Audio Quality</li>
+                                <li class="flex items-center"><svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Easy Room Creation & Joining</li>
+                                <li class="flex items-center"><svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Community Forum Support</li>
+                            </ul>
+                        </div>
+                        <a href="#" class="block text-center bg-pink-500 hover:bg-pink-600 text-white font-semibold py-3 sm:py-4 px-6 transition-colors duration-300 mt-auto text-base sm:text-lg rounded-b-xl">Sign Up for ₹99/month</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq-student" class="py-16 sm:py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-12 sm:mb-16">Got Questions? We've Got Answers!</h2>
+                <div class="max-w-3xl mx-auto space-y-4 sm:space-y-6">
+                    <div class="faq-item bg-gray-50 rounded-xl shadow-lg overflow-hidden do-animate-fadeInUp" style="animation-delay: 0.1s;">
+                        <details class="p-4 sm:p-6 group cursor-pointer">
+                            <summary class="font-semibold text-base sm:text-lg text-gray-800 list-none flex justify-between items-center group-hover:text-pink-600">
+                                How can YourMeetApp help me prepare for interviews?
+                                <span class="text-pink-500 transform transition-transform duration-300 group-open:rotate-45">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 group-open:hidden shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 hidden group-open:block shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                </span>
+                            </summary>
+                            <p class="text-gray-600 mt-3 sm:mt-4 leading-relaxed text-sm sm:text-base">
+                                Our platform allows you to conduct unlimited mock interviews. The AI provides real-time feedback on aspects like eye contact, clarity, and engagement, helping you identify areas for improvement and build confidence.
+                            </p>
+                        </details>
+                    </div>
+                    <div class="faq-item bg-gray-50 rounded-xl shadow-lg overflow-hidden do-animate-fadeInUp" style="animation-delay: 0.2s;">
+                         <details class="p-4 sm:p-6 group cursor-pointer">
+                            <summary class="font-semibold text-base sm:text-lg text-gray-800 list-none flex justify-between items-center group-hover:text-pink-600">
+                                Is the ₹99 plan truly all-inclusive for students?
+                                 <span class="text-pink-500 transform transition-transform duration-300 group-open:rotate-45">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 group-open:hidden shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 hidden group-open:block shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                </span>
+                            </summary>
+                            <p class="text-gray-600 mt-3 sm:mt-4 leading-relaxed text-sm sm:text-base">
+                                Yes! The ₹99 per month plan gives you access to all core student features, including unlimited one-on-one practice sessions and basic AI feedback. There are no hidden charges for these features.
+                            </p>
+                        </details>
+                    </div>
+                     <div class="faq-item bg-gray-50 rounded-xl shadow-lg overflow-hidden do-animate-fadeInUp" style="animation-delay: 0.3s;">
+                         <details class="p-4 sm:p-6 group cursor-pointer">
+                            <summary class="font-semibold text-base sm:text-lg text-gray-800 list-none flex justify-between items-center group-hover:text-pink-600">
+                                Do I need to download any software?
+                                 <span class="text-pink-500 transform transition-transform duration-300 group-open:rotate-45">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 group-open:hidden shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6 hidden group-open:block shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                                </span>
+                            </summary>
+                            <p class="text-gray-600 mt-3 sm:mt-4 leading-relaxed text-sm sm:text-base">
+                               No, YourMeetApp is entirely web-based. You can access it from any modern browser (like Chrome or Firefox) with a stable internet connection, webcam, and microphone.
+                            </p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-12 sm:py-16 text-center">
+        <div class="container mx-auto px-6">
+            <div class="mb-6 sm:mb-8">
+                <p class="text-xl sm:text-2xl font-semibold text-white">YourMeetApp</p>
+            </div>
+            <nav class="flex flex-wrap justify-center space-x-4 sm:space-x-6 mb-6 sm:mb-8 text-sm sm:text-base">
+                <a href="#" class="hover:text-white transition-colors duration-300">About</a>
+                <a href="#features-student" class="hover:text-white transition-colors duration-300">Student Features</a>
+                <a href="#pricing-student" class="hover:text-white transition-colors duration-300">Pricing</a>
+                <a href="#faq-student" class="hover:text-white transition-colors duration-300">Student FAQ</a>
+            </nav>
+            <p class="text-xs sm:text-sm">&copy; <script>document.write(new Date().getFullYear())</script> YourMeetApp. All rights reserved. <a href="#" class="hover:text-white underline">Privacy Policy</a> | <a href="#" class="hover:text-white underline">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle for Student Page
+        const mobileMenuButtonStudent = document.getElementById('mobile-menu-button-student');
+        const mobileMenuStudent = document.getElementById('mobile-menu-student');
+        if (mobileMenuButtonStudent) {
+            mobileMenuButtonStudent.addEventListener('click', () => {
+                mobileMenuStudent.classList.toggle('hidden');
+            });
+        }
+
+        // Simplified scroll animation trigger
+        const observerStudent = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('do-animate-fadeInUp');
+                }
+            });
+        }, { threshold: 0.05 });
+
+        document.querySelectorAll('.plan-card, .feature-item, .faq-item').forEach(el => {
+           if(!el.classList.contains('do-animate-fadeInUp')) {
+             observerStudent.observe(el);
+           }
+        });
+         document.querySelectorAll('section h1, section p, section div > a').forEach(el => { 
+            if (!el.closest('.plan-card, .feature-item, .faq-item')) { 
+                 el.classList.add('do-animate-fadeInUp');
+            }
+        });
+    </script>
+
+</body>
+</html>

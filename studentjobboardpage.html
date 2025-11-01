@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Next Opportunity - YourMeetApp</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .do-animate-fadeInUp {
+            opacity: 0; 
+            animation: fadeInUp 0.6s ease-out forwards; 
+        }
+        .job-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.08);
+        }
+        /* Modal styles */
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-content {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .modal-active .modal-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-active .modal-content {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .sidebar-content::-webkit-scrollbar { width: 6px; }
+        .sidebar-content::-webkit-scrollbar-track { background: #e2e8f0; /* gray-200 */ }
+        .sidebar-content::-webkit-scrollbar-thumb { background: #94a3b8; /* gray-400 */ border-radius: 3px; }
+        .sidebar-content::-webkit-scrollbar-thumb:hover { background: #64748b; /* gray-500 */ }
+
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-pink-600">YourMeetApp</a>
+            <div class="hidden md:flex space-x-4">
+                <a href="#" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                <a href="#" class="text-pink-600 border-b-2 border-pink-600 px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Find Jobs</a>
+                <a href="#" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">My Applications</a>
+                <a href="#" class="text-gray-600 hover:text-pink-600 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button-jobs" class="text-gray-600 hover:text-pink-600 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu-jobs" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">Dashboard</a>
+            <a href="#" class="block bg-pink-50 text-pink-600 px-4 py-3 text-sm font-medium" aria-current="page">Find Jobs</a>
+            <a href="#" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">My Applications</a>
+            <a href="#" class="block text-gray-600 hover:bg-pink-50 hover:text-pink-600 px-4 py-3 text-sm font-medium">Profile</a>
+        </div>
+    </header>
+
+    <main role="main" class="container mx-auto py-8 px-4 sm:px-6">
+        <div class="text-center mb-10 sm:mb-12 do-animate-fadeInUp">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-800">Discover Your Next Career Move</h1>
+            <p class="mt-3 sm:mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">Browse through exciting job opportunities and internships tailored for students and recent graduates.</p>
+        </div>
+
+        <div class="bg-white p-4 sm:p-6 rounded-xl shadow-lg mb-8 sm:mb-10 do-animate-fadeInUp" style="animation-delay: 0.1s;">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                <div class="md:col-span-2">
+                    <label for="searchKeyword" class="block text-sm font-medium text-slate-700 mb-1">Search (Title, Keywords, Company)</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        <input type="search" name="searchKeyword" id="searchKeyword" placeholder="e.g., Software Engineer Intern, Marketing"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-lg border border-slate-300 text-slate-900 placeholder-slate-400 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label for="location" class="block text-sm font-medium text-slate-700 mb-1">Location</label>
+                    <select id="location" name="location"
+                            class="w-full py-2.5 px-3 rounded-lg border border-slate-300 text-slate-900 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                        <option value="">All Locations</option>
+                        <option value="delhi">New Delhi</option>
+                        <option value="mumbai">Mumbai</option>
+                        <option value="bangalore">Bangalore</option>
+                        <option value="hyderabad">Hyderabad</option>
+                        <option value="remote">Remote</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="jobType" class="block text-sm font-medium text-slate-700 mb-1">Job Type</label>
+                    <select id="jobType" name="jobType"
+                            class="w-full py-2.5 px-3 rounded-lg border border-slate-300 text-slate-900 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                        <option value="">All Types</option>
+                        <option value="internship">Internship</option>
+                        <option value="full-time">Full-time</option>
+                        <option value="part-time">Part-time</option>
+                        <option value="contract">Contract</option>
+                    </select>
+                </div>
+                </div>
+        </div>
+
+        <div id="jobListingsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div class="job-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.2s;">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 hover:text-pink-600 transition-colors">
+                                <a href="#" onclick="openJobModal('Software Engineer Intern', 'Tech Solutions Inc.', 'Bangalore, India', 'Full-time', 'We are looking for an enthusiastic Software Engineer Intern to join our dynamic team. You will work on exciting projects and gain hands-on experience in software development. Responsibilities include coding, testing, and debugging applications. Must be enrolled in a Computer Science or related degree program. Strong problem-solving skills and knowledge of Python or Java preferred.')">Software Engineer Intern</a>
+                            </h3>
+                            <p class="text-sm text-slate-600">Tech Solutions Inc.</p>
+                        </div>
+                        <img src="https://placehold.co/40x40/E91E63/FFFFFF?text=TS&font=Inter" alt="Company Logo" class="w-10 h-10 rounded-full shrink-0 ml-2">
+                    </div>
+                    <div class="text-xs text-slate-500 mb-3 space-x-2">
+                        <span>📍 Bangalore, India</span>
+                        <span>💼 Full-time</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4 line-clamp-3">
+                        We are looking for an enthusiastic Software Engineer Intern to join our dynamic team. You will work on exciting projects and gain hands-on experience...
+                    </p>
+                    <span class="text-xs bg-green-100 text-green-700 font-medium px-2.5 py-1 rounded-full">New</span>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                    <button onclick="openJobModal('Software Engineer Intern', 'Tech Solutions Inc.', 'Bangalore, India', 'Full-time', 'We are looking for an enthusiastic Software Engineer Intern to join our dynamic team. You will work on exciting projects and gain hands-on experience in software development. Responsibilities include coding, testing, and debugging applications. Must be enrolled in a Computer Science or related degree program. Strong problem-solving skills and knowledge of Python or Java preferred.')" class="text-xs sm:text-sm text-pink-600 hover:text-pink-700 font-medium">View Details</button>
+                    <button onclick="applyForJob('Software Engineer Intern')" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-xs sm:text-sm">Apply Now</button>
+                </div>
+            </div>
+
+            <div class="job-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.3s;">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 hover:text-pink-600 transition-colors">
+                                <a href="#" onclick="openJobModal('Marketing Intern', 'Creative Minds Agency', 'Remote', 'Internship', 'Join our marketing team as an intern! Assist with social media campaigns, content creation, and market research. This is a great opportunity for students looking to gain real-world marketing experience. Strong communication skills and a passion for digital marketing are essential.')">Marketing Intern</a>
+                            </h3>
+                            <p class="text-sm text-slate-600">Creative Minds Agency</p>
+                        </div>
+                        <img src="https://placehold.co/40x40/4CAF50/FFFFFF?text=CM&font=Inter" alt="Company Logo" class="w-10 h-10 rounded-full shrink-0 ml-2">
+                    </div>
+                    <div class="text-xs text-slate-500 mb-3 space-x-2">
+                        <span>📍 Remote</span>
+                        <span>💼 Internship</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4 line-clamp-3">
+                        Join our marketing team as an intern! Assist with social media campaigns, content creation, and market research. This is a great opportunity...
+                    </p>
+                    <span class="text-xs text-slate-400 font-medium">Posted 3 days ago</span>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                     <button onclick="openJobModal('Marketing Intern', 'Creative Minds Agency', 'Remote', 'Internship', 'Join our marketing team as an intern! Assist with social media campaigns, content creation, and market research. This is a great opportunity for students looking to gain real-world marketing experience. Strong communication skills and a passion for digital marketing are essential.')" class="text-xs sm:text-sm text-pink-600 hover:text-pink-700 font-medium">View Details</button>
+                    <button onclick="applyForJob('Marketing Intern')" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-xs sm:text-sm">Apply Now</button>
+                </div>
+            </div>
+            
+            <div class="job-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 ease-in-out do-animate-fadeInUp" style="animation-delay: 0.4s;">
+                <div class="p-6 flex-grow">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="text-lg sm:text-xl font-semibold text-slate-800 hover:text-pink-600 transition-colors">
+                                <a href="#" onclick="openJobModal('Data Analyst - Entry Level', 'Innovatech Corp', 'New Delhi, India', 'Full-time', 'Innovatech Corp is seeking a motivated entry-level Data Analyst to help us make sense of data. You will be responsible for collecting, processing, and performing statistical analyses of data. A degree in Statistics, Mathematics, Computer Science or another quantitative field is required. Familiarity with SQL and Python is a plus.')">Data Analyst - Entry Level</a>
+                            </h3>
+                            <p class="text-sm text-slate-600">Innovatech Corp</p>
+                        </div>
+                        <img src="https://placehold.co/40x40/2196F3/FFFFFF?text=IC&font=Inter" alt="Company Logo" class="w-10 h-10 rounded-full shrink-0 ml-2">
+                    </div>
+                    <div class="text-xs text-slate-500 mb-3 space-x-2">
+                        <span>📍 New Delhi, India</span>
+                        <span>💼 Full-time</span>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed mb-4 line-clamp-3">
+                        Innovatech Corp is seeking a motivated entry-level Data Analyst to help us make sense of data. You will be responsible for collecting, processing...
+                    </p>
+                     <span class="text-xs text-slate-400 font-medium">Posted 1 week ago</span>
+                </div>
+                <div class="p-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+                    <button onclick="openJobModal('Data Analyst - Entry Level', 'Innovatech Corp', 'New Delhi, India', 'Full-time', 'Innovatech Corp is seeking a motivated entry-level Data Analyst to help us make sense of data. You will be responsible for collecting, processing, and performing statistical analyses of data. A degree in Statistics, Mathematics, Computer Science or another quantitative field is required. Familiarity with SQL and Python is a plus.')" class="text-xs sm:text-sm text-pink-600 hover:text-pink-700 font-medium">View Details</button>
+                    <button onclick="applyForJob('Data Analyst - Entry Level')" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg shadow-sm hover:shadow-md transition-all text-xs sm:text-sm">Apply Now</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 sm:mt-12 flex justify-center do-animate-fadeInUp" style="animation-delay: 0.5s;">
+            <nav class="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                    <span>Previous</span>
+                </a>
+                <a href="#" aria-current="page" class="relative z-10 inline-flex items-center px-4 py-2 border border-pink-500 bg-pink-50 text-sm font-medium text-pink-600">1</a>
+                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">2</a>
+                <a href="#" class="relative hidden md:inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">3</a>
+                <span class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-700">...</span>
+                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">8</a>
+                <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 bg-white text-sm font-medium text-slate-500 hover:bg-slate-50">
+                    <span>Next</span>
+                </a>
+            </nav>
+        </div>
+    </main>
+
+    <div id="jobDetailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay bg-black bg-opacity-50 opacity-0 pointer-events-none">
+        <div id="jobDetailModalContent" class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col opacity-0 transform -translate-y-10 scale-95">
+            <div class="flex justify-between items-center p-5 border-b border-slate-200">
+                <h2 id="modalJobTitle" class="text-xl sm:text-2xl font-semibold text-slate-800">Job Title Here</h2>
+                <button onclick="closeJobModal()" class="text-slate-400 hover:text-slate-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-5 sm:p-6 space-y-4 overflow-y-auto sidebar-content flex-grow">
+                <div class="flex items-center mb-4">
+                    <img id="modalCompanyLogo" src="https://placehold.co/50x50/E91E63/FFFFFF?text=C&font=Inter" alt="Company Logo" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <p id="modalCompanyName" class="text-lg font-medium text-slate-700">Company Name LLC</p>
+                        <p id="modalJobLocation" class="text-sm text-slate-500">Location, Country</p>
+                    </div>
+                </div>
+                <div>
+                    <span id="modalJobType" class="text-xs bg-indigo-100 text-indigo-700 font-medium px-2.5 py-1 rounded-full">Job Type</span>
+                </div>
+                <h3 class="text-md font-semibold text-slate-700 pt-2">Job Description:</h3>
+                <p id="modalJobDescription" class="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+                    Full job description will appear here. 
+                    This section will detail the responsibilities, qualifications, and any other relevant information about the position.
+                </p>
+                </div>
+            <div class="p-5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+                <button onclick="closeJobModal()" class="px-4 py-2.5 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors w-full sm:w-auto">Close</button>
+                <button id="modalApplyButton" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm hover:shadow-md transition-all text-sm w-full sm:w-auto">Apply Now</button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="bg-slate-800 text-gray-400 py-8 text-center mt-12">
+        <div class="container mx-auto px-6">
+            <p class="text-xs sm:text-sm">&copy; <script>document.write(new Date().getFullYear())</script> YourMeetApp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuButtonJobs = document.getElementById('mobile-menu-button-jobs');
+        const mobileMenuJobs = document.getElementById('mobile-menu-jobs');
+        if (mobileMenuButtonJobs) {
+            mobileMenuButtonJobs.addEventListener('click', () => {
+                mobileMenuJobs.classList.toggle('hidden');
+            });
+        }
+
+        // Job Detail Modal Logic
+        const jobDetailModal = document.getElementById('jobDetailModal');
+        const modalJobTitle = document.getElementById('modalJobTitle');
+        const modalCompanyName = document.getElementById('modalCompanyName');
+        const modalCompanyLogo = document.getElementById('modalCompanyLogo');
+        const modalJobLocation = document.getElementById('modalJobLocation');
+        const modalJobType = document.getElementById('modalJobType');
+        const modalJobDescription = document.getElementById('modalJobDescription');
+        const modalApplyButton = document.getElementById('modalApplyButton');
+
+        function openJobModal(title, company, location, type, description) {
+            modalJobTitle.textContent = title;
+            modalCompanyName.textContent = company;
+            modalJobLocation.textContent = location;
+            modalJobType.textContent = type;
+            modalJobDescription.textContent = description;
+            // Update logo - for demo, just use a placeholder based on company initial
+            const companyInitial = company.charAt(0).toUpperCase();
+            modalCompanyLogo.src = `https://placehold.co/50x50/78716C/FFFFFF?text=${companyInitial}&font=Inter`; // slate-500
+            
+            modalApplyButton.onclick = () => applyForJob(title); // Set apply action for modal button
+
+            jobDetailModal.classList.remove('opacity-0', 'pointer-events-none');
+            jobDetailModal.classList.add('modal-active');
+            document.body.classList.add('overflow-hidden'); // Prevent background scroll
+        }
+
+        function closeJobModal() {
+            jobDetailModal.classList.add('opacity-0', 'pointer-events-none');
+            jobDetailModal.classList.remove('modal-active');
+            document.body.classList.remove('overflow-hidden');
+        }
+        
+        // Close modal on escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && jobDetailModal.classList.contains('modal-active')) {
+                closeJobModal();
+            }
+        });
+        // Close modal on overlay click
+        jobDetailModal.addEventListener('click', (event) => {
+            if (event.target === jobDetailModal) { // Check if click is on the overlay itself
+                closeJobModal();
+            }
+        });
+
+
+        function applyForJob(jobTitle) {
+            alert(`Applying for: ${jobTitle} (This is a demo - in a real app, this would trigger an application process or redirect).`);
+            // Potentially close modal after "applying"
+            if (jobDetailModal.classList.contains('modal-active')) {
+                closeJobModal();
+            }
+        }
+
+        // Simplified scroll animation trigger
+        const animatedElements = document.querySelectorAll('.do-animate-fadeInUp');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('do-animate-fadeInUp');
+                    entry.target.style.opacity = 1; 
+                }
+            });
+        }, { threshold: 0.05 });
+
+        animatedElements.forEach(el => {
+            el.style.opacity = 0; 
+            observer.observe(el);
+        });
+    </script>
+
+</body>
+</html>
